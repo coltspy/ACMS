@@ -19,7 +19,9 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from vehicles.views import VehicleViewSet, FleetViewSet, DepotViewSet
+from apikeys.views import get_api_key
 
+# Create a router and register our viewsets with it
 router = DefaultRouter()
 router.register(r'vehicles', VehicleViewSet)
 router.register(r'fleet', FleetViewSet, basename='fleet')
@@ -27,5 +29,6 @@ router.register(r'depots', DepotViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('api/', include(router.urls)),  # Include the router URLs under /api/
+    path('api/key/', get_api_key),
 ]
