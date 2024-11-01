@@ -1,123 +1,213 @@
-'use client'
-
-import React from 'react'
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Clipboard, AlertCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Route, MapPin, Clock, Navigation } from "lucide-react"
 
-const CodeBlock = ({ children, language }: { children: string; language: string }) => (
-  <div className="relative">
-    <pre className={`language-${language} rounded-md bg-gray-800 p-4 text-sm text-white overflow-x-auto`}>
-      <code>{children}</code>
-    </pre>
-    <Button
-      variant="outline"
-      size="icon"
-      className="absolute right-2 top-2"
-      onClick={() => navigator.clipboard.writeText(children)}
-    >
-      <Clipboard className="h-4 w-4" />
-      <span className="sr-only">Copy code</span>
-    </Button>
-  </div>
-)
-
-const EndpointCard = ({ method, endpoint, description, requestExample, responseExample }: {
-  method: string;
-  endpoint: string;
-  description: string;
-  requestExample: string;
-  responseExample: string;
-}) => (
-  <Card className="mt-6">
-    <CardHeader>
-      <CardTitle className="flex items-center gap-2">
-        <span className={`px-2 py-1 rounded-md text-white ${method === 'GET' ? 'bg-blue-500' : 'bg-green-500'}`}>
-          {method}
-        </span>
-        <span>{endpoint}</span>
-      </CardTitle>
-      <CardDescription>{description}</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <Tabs defaultValue="request">
-        <TabsList>
-          <TabsTrigger value="request">Request</TabsTrigger>
-          <TabsTrigger value="response">Response</TabsTrigger>
-        </TabsList>
-        <TabsContent value="request">
-          <CodeBlock language="bash">{requestExample}</CodeBlock>
-        </TabsContent>
-        <TabsContent value="response">
-          <CodeBlock language="json">{responseExample}</CodeBlock>
-        </TabsContent>
-      </Tabs>
-    </CardContent>
-  </Card>
-)
-
-export default function RoutesAPI() {
+export default function RoutesAPIPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Routes API</h1>
-      <p className="text-gray-600 mb-6">
-        Manage and track vehicle routes, including start and end locations.
-      </p>
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold mb-4">Routes API</h1>
+        <p className="text-lg text-muted-foreground">
+          Complete reference for the Routes API endpoints, including route planning, optimization, and real-time tracking.
+        </p>
+      </div>
 
       <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Authentication Required</AlertTitle>
+        <Route className="h-4 w-4" />
         <AlertDescription>
-          All API requests require a valid API key to be included in the header.
+          Base URL for all route endpoints: <code className="text-sm">/api/routes/</code>
         </AlertDescription>
       </Alert>
 
-      <EndpointCard
-        method="GET"
-        endpoint="/api/routes"
-        description="Retrieve a list of all routes, including start and end locations."
-        requestExample={`
-GET /api/routes
-Authorization: Bearer YOUR_API_KEY`}
-        responseExample={`
-{
-  "routes": [
-    {
-      "id": 1,
-      "start_location": "Depot A",
-      "end_location": "Depot B"
-    },
-    {
-      "id": 2,
-      "start_location": "Depot C",
-      "end_location": "Depot D"
-    }
-  ]
-}`}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Route Parameters</CardTitle>
+          <CardDescription>Required parameters for route planning</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              {
+                param: "pickup_location",
+                type: "Object",
+                description: "Pickup coordinates (latitude, longitude)"
+              },
+              {
+                param: "dropoff_location",
+                type: "Object",
+                description: "Dropoff coordinates (latitude, longitude)"
+              },
+              {
+                param: "vehicle_id",
+                type: "Integer",
+                description: "ID of the assigned vehicle"
+              },
+              {
+                param: "estimated_duration",
+                type: "Integer",
+                description: "Estimated trip duration in minutes"
+              }
+            ].map(({ param, type, description }) => (
+              <div key={param} className="p-4 border rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <code className="text-sm font-semibold">{param}</code>
+                  <Badge variant="outline">{type}</Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">{description}</p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-      <EndpointCard
-        method="POST"
-        endpoint="/api/routes"
-        description="Create a new route by specifying start and end locations."
-        requestExample={`
-POST /api/routes
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
+      <Card>
+        <CardHeader>
+          <CardTitle>Endpoints</CardTitle>
+          <CardDescription>Available API endpoints for route management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Method</TableHead>
+                <TableHead>Endpoint</TableHead>
+                <TableHead>Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/routes/plan</code></TableCell>
+                <TableCell>Create a new route plan</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>GET</Badge>
+                </TableCell>
+                <TableCell><code>/api/routes/{'{id}'}</code></TableCell>
+                <TableCell>Get route details</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/routes/{'{id}'}/update</code></TableCell>
+                <TableCell>Update route progress</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>GET</Badge>
+                </TableCell>
+                <TableCell><code>/api/routes/active</code></TableCell>
+                <TableCell>List all active routes</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/routes/{'{id}'}/optimize</code></TableCell>
+                <TableCell>Optimize existing route</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-{
-  "start_location": "Depot A",
-  "end_location": "Depot E"
-}`}
-        responseExample={`
-{
-  "id": 3,
-  "start_location": "Depot A",
-  "end_location": "Depot E"
-}`}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Navigation className="h-5 w-5 text-primary" />
+              <CardTitle>Route Planning</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Intelligent route planning with real-time optimization.
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm">
+              <li>Traffic-aware routing</li>
+              <li>Multiple waypoint support</li>
+              <li>Alternative route suggestions</li>
+              <li>Battery-aware planning</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-primary" />
+              <CardTitle>Real-time Updates</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Live tracking and route progress monitoring.
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm">
+              <li>Live location tracking</li>
+              <li>ETA updates</li>
+              <li>Route deviation alerts</li>
+              <li>Progress notifications</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Example Request</CardTitle>
+          <CardDescription>Sample route planning request</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <pre className="bg-accent p-4 rounded-lg overflow-x-auto">
+            {JSON.stringify({
+              pickup_location: {
+                latitude: 34.0522,
+                longitude: -118.2437
+              },
+              dropoff_location: {
+                latitude: 34.0689,
+                longitude: -118.4452
+              },
+              vehicle_id: 123,
+              preferences: {
+                avoid_highways: false,
+                minimize_charging_stops: true
+              }
+            }, null, 2)}
+          </pre>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>WebSocket Updates</CardTitle>
+          <CardDescription>Real-time route updates via WebSocket</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            Connect to the WebSocket endpoint to receive real-time updates:
+          </p>
+          <code className="block bg-accent p-4 rounded-lg">
+            ws://your-domain/ws/routes/{'{route_id}'}
+          </code>
+          <div className="mt-4 space-y-2">
+            <p className="text-sm font-medium">Update Types:</p>
+            <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+              <li>Location updates</li>
+              <li>ETA changes</li>
+              <li>Route modifications</li>
+              <li>Status changes</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

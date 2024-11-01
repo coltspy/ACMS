@@ -11,7 +11,7 @@ import {
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar"
-import { Home, Code2, Book, Lock, Radio, FileCode, Settings, ChevronDown, Car, Route, MapPin, LucideIcon } from "lucide-react"
+import { Home, Code2, Book, Lock, Radio, FileCode, Settings, ChevronDown, Car, Route, MapPin, Key, LucideIcon } from "lucide-react"
 import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -47,6 +47,11 @@ const menuItems: MenuItem[] = [
     icon: Code2,
     href: "/api",
     submenu: [
+      {
+        title: "API Key",
+        href: "/api/apikeys",
+        description: "Create API Key"
+      },
       {
         title: "Vehicles",
         href: "/api/vehicles",
@@ -176,11 +181,10 @@ export default function RootLayout({
             <Sidebar className="border-r">
               <SidebarHeader className="p-4 border-b">
                 <div className="flex items-center gap-2">
-                  <Car className="h-6 w-6 text-primary" />
                   <div>
-                    <h2 className="text-lg font-bold">ACMS API</h2>
+                    <h2 className="text-lg font-bold">AVMS.dev</h2>
                     <p className="text-xs text-muted-foreground">
-                      Autonomous Car Management System
+                      github.com/coltspy
                     </p>
                   </div>
                 </div>
@@ -198,14 +202,8 @@ export default function RootLayout({
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Settings className="h-4 w-4" />
-                    <span>v1.0.0</span>
+                    <span>v1.0</span>
                   </div>
-                  <a 
-                    href="/docs/changelog"
-                    className="text-xs hover:underline"
-                  >
-                    Changelog
-                  </a>
                 </div>
               </SidebarFooter>
             </Sidebar>

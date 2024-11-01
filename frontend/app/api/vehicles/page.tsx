@@ -1,143 +1,152 @@
-'use client'
-
-import React from 'react'
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Clipboard, AlertCircle } from "lucide-react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Car, Battery, MapPin } from "lucide-react"
 
-const CodeBlock = ({ children, language }: { children: string; language: string }) => (
-  <div className="relative">
-    <pre className={`language-${language} rounded-md bg-gray-800 p-4 text-sm text-white overflow-x-auto`}>
-      <code>{children}</code>
-    </pre>
-    <Button
-      variant="outline"
-      size="icon"
-      className="absolute right-2 top-2"
-      onClick={() => navigator.clipboard.writeText(children)}
-    >
-      <Clipboard className="h-4 w-4" />
-      <span className="sr-only">Copy code</span>
-    </Button>
-  </div>
-)
-
-const EndpointCard = ({ method, endpoint, description, requestExample, responseExample }: {
-  method: string;
-  endpoint: string;
-  description: string;
-  requestExample: string;
-  responseExample: string;
-}) => (
-  <Card className="mt-6">
-    <CardHeader>
-      <CardTitle className="flex items-center gap-2">
-        <span className={`px-2 py-1 rounded-md text-white ${method === 'GET' ? 'bg-blue-500' : 'bg-green-500'}`}>
-          {method}
-        </span>
-        <span>{endpoint}</span>
-      </CardTitle>
-      <CardDescription>{description}</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <Tabs defaultValue="request">
-        <TabsList>
-          <TabsTrigger value="request">Request</TabsTrigger>
-          <TabsTrigger value="response">Response</TabsTrigger>
-        </TabsList>
-        <TabsContent value="request">
-          <CodeBlock language="bash">{requestExample}</CodeBlock>
-        </TabsContent>
-        <TabsContent value="response">
-          <CodeBlock language="json">{responseExample}</CodeBlock>
-        </TabsContent>
-      </Tabs>
-    </CardContent>
-  </Card>
-)
-
-export default function VehiclesAPI() {
+export default function VehiclesAPIPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-2">Vehicles API</h1>
-      <p className="text-gray-600 mb-6">
-        Manage your fleet of vehicles, including creating, updating, and viewing vehicle details.
-      </p>
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div>
+        <h1 className="text-4xl font-bold mb-4">Vehicles API</h1>
+        <p className="text-lg text-muted-foreground">
+          Complete reference for the Vehicles API endpoints, including vehicle management, status updates, and ride operations.
+        </p>
+      </div>
 
       <Alert>
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Authentication Required</AlertTitle>
+        <Car className="h-4 w-4" />
         <AlertDescription>
-          All API requests require a valid API key to be included in the header.
+          Base URL for all vehicle endpoints: <code className="text-sm">/api/vehicles/</code>
         </AlertDescription>
       </Alert>
 
-      <EndpointCard
-        method="GET"
-        endpoint="/api/vehicles"
-        description="Retrieve a list of all vehicles."
-        requestExample={`
-GET /api/vehicles
-Authorization: Bearer YOUR_API_KEY`}
-        responseExample={`
-{
-  "vehicles": [
-    {
-      "id": 1,
-      "name": "Vehicle A",
-      "state": "AVAILABLE",
-      "battery_level": 85
-    },
-    {
-      "id": 2,
-      "name": "Vehicle B",
-      "state": "IN_RIDE",
-      "battery_level": 45
-    }
-  ]
-}`}
-      />
+      <Card>
+        <CardHeader>
+          <CardTitle>Vehicle States</CardTitle>
+          <CardDescription>Available vehicle states in the system</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { state: "DOCKED", description: "Vehicle is docked at a depot" },
+              { state: "EN_ROUTE_TO_PICKUP", description: "Vehicle is heading to pickup location" },
+              { state: "AWAITING_PASSENGER", description: "Vehicle is waiting for passenger" },
+              { state: "IN_RIDE", description: "Vehicle is currently in a ride" },
+              { state: "RETURNING", description: "Vehicle is returning to depot" }
+            ].map(({ state, description }) => (
+              <div key={state} className="flex items-start gap-2 p-4 border rounded-lg">
+                <Badge variant="outline">{state}</Badge>
+                <span className="text-sm text-muted-foreground">{description}</span>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-      <EndpointCard
-        method="POST"
-        endpoint="/api/vehicles"
-        description="Create a new vehicle by providing details like `name`, `battery_level`, and `state`."
-        requestExample={`
-POST /api/vehicles
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
+      <Card>
+        <CardHeader>
+          <CardTitle>Endpoints</CardTitle>
+          <CardDescription>Available API endpoints for vehicle management</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Method</TableHead>
+                <TableHead>Endpoint</TableHead>
+                <TableHead>Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge>GET</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/</code></TableCell>
+                <TableCell>List all vehicles</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/</code></TableCell>
+                <TableCell>Create a new vehicle</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>GET</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/{'{id}'}/</code></TableCell>
+                <TableCell>Get vehicle details</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/{'{id}'}/request_ride/</code></TableCell>
+                <TableCell>Request a ride from vehicle</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/{'{id}'}/complete_ride/</code></TableCell>
+                <TableCell>Complete current ride</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge>POST</Badge>
+                </TableCell>
+                <TableCell><code>/api/vehicles/{'{id}'}/schedule_maintenance/</code></TableCell>
+                <TableCell>Schedule vehicle maintenance</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-{
-  "name": "Vehicle C",
-  "battery_level": 100,
-  "state": "AVAILABLE"
-}`}
-        responseExample={`
-{
-  "id": 3,
-  "name": "Vehicle C",
-  "state": "AVAILABLE",
-  "battery_level": 100
-}`}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Battery className="h-5 w-5 text-primary" />
+              <CardTitle>Battery Management</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Vehicles automatically monitor battery levels and request charging when below 20%.
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm">
+              <li>Battery level monitoring</li>
+              <li>Automatic charging requests</li>
+              <li>Charging status updates</li>
+              <li>Low battery alerts</li>
+            </ul>
+          </CardContent>
+        </Card>
 
-      <EndpointCard
-        method="GET"
-        endpoint="/api/vehicles/{id}"
-        description="Retrieve details of a specific vehicle by ID."
-        requestExample={`
-GET /api/vehicles/1
-Authorization: Bearer YOUR_API_KEY`}
-        responseExample={`
-{
-  "id": 1,
-  "name": "Vehicle A",
-  "state": "AVAILABLE",
-  "battery_level": 85
-}`}
-      />
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-primary" />
+              <CardTitle>Maintenance</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-4">
+              Schedule and track vehicle maintenance through the API.
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm">
+              <li>Maintenance scheduling</li>
+              <li>Service history tracking</li>
+              <li>Maintenance alerts</li>
+              <li>Service status updates</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
