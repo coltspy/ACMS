@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import { Map, Marker } from 'pigeon-maps'
 import axios from 'axios'
-
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 interface Vehicle {
   id: number
   name: string
