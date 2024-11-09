@@ -1,6 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import {
@@ -11,7 +10,7 @@ import {
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar"
-import { Home, Code2, Book, Lock, Radio, FileCode, Settings, ChevronDown, Car, Route, MapPin, Key, LucideIcon } from "lucide-react"
+import {  Code2, Lock, Radio, FileCode, Settings, ChevronDown, Car, LucideIcon } from "lucide-react"
 import { useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })

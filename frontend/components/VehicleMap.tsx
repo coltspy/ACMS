@@ -50,7 +50,7 @@ const ClientSideMap = () => {
     }
 
     fetchVehicles()
-  }, [mounted])
+  }, [mounted, SF_CENTER])
 
   // Vehicle movement simulation
   useEffect(() => {
@@ -87,7 +87,7 @@ const ClientSideMap = () => {
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [mounted])
+  }, [mounted, CHARGING_STATIONS])
 
   if (!mounted) return null
 

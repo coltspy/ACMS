@@ -171,7 +171,7 @@ useEffect(() => {
     if (vehicle.state !== 'DOCKED') {
       setPath(current => [...current, [vehicle.latitude, vehicle.longitude]])
     }
-  }, [vehicle.latitude, vehicle.longitude])
+  }, [vehicle.latitude, vehicle.longitude, vehicle.state])
 
   const startRideRequest = () => {
     setRequestState('PICKUP')
