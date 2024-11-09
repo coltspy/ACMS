@@ -69,25 +69,7 @@ const menuItems: MenuItem[] = [
       }
     ]
   },
-  {
-    title: "Documentation",
-    icon: Book,
-    href: "/docs",
-    submenu: [
-      {
-        title: "Getting Started",
-        href: "/docs/getting-started"
-      },
-      {
-        title: "Installation",
-        href: "/docs/installation"
-      },
-      {
-        title: "Best Practices",
-        href: "/docs/best-practices"
-      }
-    ]
-  },
+
   {
     title: "Authentication",
     icon: Lock,

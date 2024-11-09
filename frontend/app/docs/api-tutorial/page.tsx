@@ -107,7 +107,7 @@ export default function DocumentationPage() {
                 <div>
                   <h3 className="text-lg font-semibold mb-2">1. Clone the Repository</h3>
                   <pre className="bg-accent p-4 rounded-lg text-sm">
-                    git clone https://github.com/your-org/acms.git
+                    git clone https://github.com/coltspy/acms.git
                     cd acms
                   </pre>
                 </div>
