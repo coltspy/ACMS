@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Map, Marker } from 'pigeon-maps'
 import axios from 'axios'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+
 interface Vehicle {
   id: number
   name: string
@@ -27,12 +26,10 @@ const ClientSideMap = () => {
     { id: 3, name: "Mission Station", latitude: 37.7600, longitude: -122.4100 },
   ]
 
-  // Handle client-side mounting
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Fetch vehicles after mounting
   useEffect(() => {
     if (!mounted) return
 
@@ -53,7 +50,6 @@ const ClientSideMap = () => {
     fetchVehicles()
   }, [mounted, SF_CENTER])
 
-  // Vehicle movement simulation
   useEffect(() => {
     if (!mounted) return
 
@@ -64,7 +60,6 @@ const ClientSideMap = () => {
 
           const newBattery = Math.max(0, vehicle.battery_level - 0.05)
           
-          // Need charging
           if (newBattery < 20) {
             const station = CHARGING_STATIONS[0]
             return {
@@ -76,7 +71,6 @@ const ClientSideMap = () => {
             }
           }
 
-          // Regular movement
           return {
             ...vehicle,
             latitude: vehicle.latitude + (Math.random() - 0.5) * 0.0001,
@@ -94,7 +88,6 @@ const ClientSideMap = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      {/* Vehicle List */}
       <div className="col-span-1 space-y-4">
         <h2 className="text-xl font-semibold">Vehicles</h2>
         {vehicles.map((vehicle) => (
@@ -129,7 +122,6 @@ const ClientSideMap = () => {
         ))}
       </div>
 
-      {/* Map */}
       <div className="col-span-1 md:col-span-3">
         <div className="h-[600px] w-full rounded-lg overflow-hidden shadow-lg">
           <Map 
